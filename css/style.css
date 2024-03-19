@@ -1,0 +1,32 @@
+section button{
+    background-color: #e7ad52;
+    color: #111;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+section button:hover {
+    background-color: #d08a1d;
+}
+
+section img{
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+}
+
+form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.red {
+    color: red;
+    transition: all ease-in 1s ;
+}

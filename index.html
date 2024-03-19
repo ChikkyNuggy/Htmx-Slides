@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>HTMX</title>
+		<link rel="icon" href="/assets/htmxlogo.png" type="image/icon type">
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/night.css">
+		<link rel="stylesheet" href="./css/style.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+		<script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section>
+						<h1>htmx</h1>
+					</section>
+					<section>
+						<h2>Inhoud</h2>
+						<ul>
+							<li>Wat is htmx?</li>
+							<li>Htmx attributes</li>
+							<li>Htmx extra's</li>
+							<li>Recap</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h1>Wat is htmx?</h1>
+					</section>
+					<section>
+						<h2>Eerst kijken we naar:</h2>
+						<pre><code data-trim data-noescape>
+							&lt;a href="/blog"&gt;Blog&lt;/a&gt;
+						</code></pre>
+						<p style="font-size: 1.5rem;">Wanneer gebruiker klikt HTTP-verzoek naar '/blog' en laad de responsinhoud in de browser</p>						
+					</section> 
+					<section>
+						<h2>HTML beperkingen</h2>
+						<ul style="font-size: 2rem;">
+							<li>Why should only &lt;a&gt; & &lt;form&gt; be able to make HTTP requests?</li>
+							<li>Why should only click & submit events trigger them?</li>
+							<li>Why should only GET & POST methods be available?</li>
+							<li>Why should you only be able to replace the entire screen?</li>
+						</ul>
+					</section>
+					<section>
+						<p>Htmx maakt het mogelijk om:</p>
+						<pre><code data-trim data-noescape>
+							&lt;button hx-post="/clicked"
+							hx-trigger="click"
+							hx-target="#parent-div"
+							hx-swap="outerHTML"&gt;Click Me!&lt;/button&gt;
+						</code></pre>
+						<p style="font-size: 1.5rem;">Als een gebruiker op deze knop klikt, doe dan een HTTP POST-verzoek naar '/clicked' en gebruik de inhoud van het antwoord om het element met het id parent-div in de DOM te vervangen.</p>
+					</section>
+					<section>
+						<h3>CDN</h3>
+						<pre><code data-trim data-noescape>
+							&lt;script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"&gt;&lt;/script&gt;
+						</code></pre>
+						<br>
+						<h3>Package manager</h3>
+						<pre><code data-trim data-noescape>
+							(p)npm install htmx.org
+							// javascript
+							import htmx from 'htmx.org'
+							window.htmx = require('htmx.org');
+						</code></pre>
+					</section>
+					<section>
+						<h2>Library of Framework?</h2>
+						<hr>
+						<a href="https://htmx.org/essays/is-htmx-another-javascript-framework/">article</article></a>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h1>Htmx attributes</h1>
+					</section>
+					<section>
+						<h2>Ajax requests</h2>
+						<pre>
+							<code data-trim data-noescape>
+								hx-get
+								hx-post
+								hx-put
+								hx-patch
+								hx-delete
+							</code>
+						</pre>
+						<p style="font-size: 1.5rem;">Ze nemen allemaal een url om dan een Ajax request te sturen</p>
+						<button hx-get="http://localhost:3000/users" hx-swap="outerHTML">Get Users</button>
+					</section>
+					<section>
+						<h2>Triggers</h2>
+						<pre>
+							<code data-trim data-noescape>
+								hx-trigger="click"
+								hx-trigger="mouseover"
+								hx-trigger="custom-event"
+							</code>
+						</pre>
+						<button hx-get="http://localhost:3000/users" hx-swap="outerHTML">Click!</button>
+						<button hx-get="http://localhost:3000/users" hx-swap="outerHTML" hx-trigger="mouseover">Hover!</button>
+					</section>
+					<section>
+						<h2>Trigger modifiers</h2>
+						<pre>
+							<code data-trim data-noescape>
+								hx-trigger="click"
+								hx-trigger="click[ctrlKey]"
+								hx-trigger="keyup changed delay:500ms"
+							</code>
+						</pre>
+						<button hx-get="http://localhost:3000/users" hx-swap="outerHTML" hx-trigger="click[ctrlKey] delay:2s">Ctrl click!</button>
+					</section>
+					<section>
+						<h2>Trigger events</h2>
+						<pre>
+							<code data-trim data-noescape>
+								hx-trigger="load"
+								hx-trigger="revealed"
+								hx-trigger="intersect"
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h2>Polling</h2>
+						<pre>
+							<code data-trim data-noescape>
+								hx-trigger="every 2s"
+							</code>
+						</pre>
+						<h5 id="pollingElement" hx-get="http://localhost:3000/views" hx-trigger="every 5s">Views</h5>
+					</section>
+					<section>
+						<h2>Indicators</h2>
+						<pre>
+							<code data-trim data-noescape>
+								&lt;button hx-get="/click"&gt;
+									Click Me!
+									&lt;img class="htmx-indicator" src="/spinner.gif"&gt;
+								&lt;/button&gt;
+							</code>
+						</pre>
+						<button hx-get="http://localhost:3000/delay" hx-swap="outerHTML">
+							Click Me!
+							<img class="htmx-indicator" src="/assets/loader.gif">
+						</button>
+					</section>
+					<section>
+						<h2>Indicators V2</h2>
+						<pre>
+							<code data-trim data-noescape>
+								&lt;button hx-get="/click" hx-indicator="#indicator"&gt;
+									Click Me!
+								&lt;/button&gt;
+								&lt;img id="indicator" class="htmx-indicator" src="/spinner.gif"/&gt;
+							</code>
+						</pre>
+						<img id="indicator" class="htmx-indicator" src="/assets/loader.gif">
+						<button hx-get="http://localhost:3000/delay" hx-swap="outerHTML" hx-indicator="#indicator" hx-disabled-elt="this">
+							Click Me!
+						</button>
+					</section>
+					<section>
+						<h2>Targets</h2>
+						<pre>
+							<code data-trim data-noescape>
+								hx-target="#target"
+								hx-target="closest ul"
+								hx-target="next .target"
+								hx-target="previous div"
+								hx-target="find #active"
+							</code>
+						</pre>
+						<ul>
+							<li>User 1</li>
+							<li>User 2</li>
+						</ul>
+						<button hx-get="http://localhost:3000/usersnolist" hx-target="previous ul" style="display: block;">Click me!</button>
+					</section>
+					<section>
+						<h2>Swap</h2>
+						<pre>
+							<code data-trim data-noescape>
+								hx-swap="innerHTML"
+								hx-swap="outerHTML"
+								hx-swap="afterbegin"
+								hx-swap="beforeend"
+								hx-swap="none"
+							</code>
+						</pre>
+						<button hx-get="http://localhost:3000/users">innerHTML</button>
+						<button hx-get="http://localhost:3000/users" hx-swap="outerHTML">outerHTML</button>
+						<button hx-get="http://localhost:3000/users" hx-swap="afterbegin">afterbegin</button>
+						<button hx-get="http://localhost:3000/users" hx-swap="beforeend">beforeend</button>
+					</section>
+					<section>
+						<h2>Confirming</h2>
+						<pre>
+							<code data-trim data-noescape>
+								hx-confirm="Are you sure?"
+							</code>
+						</pre>
+						<button hx-get="http://localhost:3000/users" hx-swap="outerHTML" hx-confirm="Are you sure?">Click me!</button>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h1>Htmx extra's</h1>
+					</section>
+					<section>
+						<h2>Inheritance</h2>
+						<pre>
+							<code data-trim data-noescape>
+								&lt;button hx-delete="/account" hx-confirm="Are you sure?"&gt;
+									Delete My Account
+								&lt;/button&gt;
+								&lt;button hx-put="/account" hx-confirm="Are you sure?"&gt;
+									Update My Account
+								&lt;/button&gt;
+							</code>
+						</pre>
+						<p style="font-size: 1.5rem;">No inheritance</p>
+						<pre>
+							<code data-trim data-noescape>
+								&lt;div hx-confirm="Are you sure?"&gt;
+									&lt;button hx-delete="/account"&gt;
+										Delete My Account
+									&lt;/button&gt;
+									&lt;button hx-put="/account"&gt;
+										Update My Account
+									&lt;/button&gt;
+								&lt;/div&gt;
+							</code>
+						</pre>
+						<p style="font-size: 1.5rem;">Inheritance</p>
+					</section>
+					<section>
+						<h2>Browser history</h2>
+						<pre>
+							<code data-trim data-noescape>
+								&lt;a hx-get="/users" hx-push-url="true"&gt;Blog&lt;/a&gt;
+							</code>
+						</pre>
+						<a hx-get="http://localhost:3000/users" hx-push-url="true" hx-swap="outerHTML">Users</a>
+					</section>
+					<section>
+						<h2>Forms</h2>
+						<pre>
+							<code data-trim data-noescape>
+								&lt;form hx-post="/submit" hx-target="#form-div" hx-swap="outerHTML"&gt;
+									&lt;input type="text" name="name"&gt;
+									&lt;input type="submit" value="Submit"&gt;
+								&lt;/form&gt;
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h2>Params</h2>
+						<pre>
+							<code data-trim data-noescape>
+								&lt;div hx-post="/users" hx-vals='{"username": "🐔"}'&gt;add user&lt;/div&gt;
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h2>Client validation</h2>
+						<pre>
+							<code data-trim data-noescape>
+								&lt;form id="example-form" hx-post="/test"&gt;
+									&lt;input name="example"
+										   onkeyup="this.setCustomValidity('') // reset the validation on keyup"
+										   hx-on:htmx:validation:validate="if(this.value != 'foo') {
+													this.setCustomValidity('Please enter the value foo') // set the validation error
+													htmx.find('#foo-form').reportValidity()              // report the issue
+												}"&gt;
+								&lt;/form&gt;
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h2>Server validation</h2>
+						<pre>
+							<code data-trim data-noescape>
+								&lt;form id="example-form" hx-post="/test"&gt;
+									&lt;input name="example" hx-post="/validate" 
+											hx-trigger="keyup changed delay:500ms"&gt;
+								&lt;/form&gt;
+							</code>
+						</pre>
+						<form>
+							<label for="email">Email</label>
+							<input type="text" name="email" hx-post="http://localhost:3000/validate" hx-trigger="keyup changed delay:500ms" hx-target="#error">
+							<p id="error" style="font-size: 1rem;"></p>
+						</form>
+					</section>
+					<section>
+						<h2>Synchronization</h2>
+						<pre>
+							<code data-trim data-noescape>
+								&lt;form hx-post="/store"&gt;
+									&lt;input id="title" name="title" type="text"
+										hx-post="/validate"
+										hx-trigger="change"
+										hx-sync="closest form:abort"
+									&gt;
+									&lt;button type="submit"&gt;Submit&lt;/button&gt;
+								&lt;/form&gt;
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h2>CSS transitions</h2>
+						<pre>
+							<code data-trim data-noescape>
+								//before request
+								&lt;div id="div1" hx-get="/div1" hx-swap="outerHTML" hx-trigger="click"&gt;Original content&lt;/div&gt;
+								//after request
+								&lt;div id="div1" class="red"&gt;New content&lt;/div&gt;
+							</code>
+						</pre>
+						<pre>
+							<code data-trim data-noescape>
+								.red {
+									color: red;
+									transition: all ease-in 1s ;
+								}
+							</code>
+						</pre>
+						<div id="div1" hx-get="http://localhost:3000/div1" hx-swap="outerHTML" hx-trigger="click">Original content</div>
+					</section>
+				</section>
+				<section>
+					<h2>Recap</h2>
+					<a href="https://www.youtube.com/watch?v=r-GSGH2RxJs">Video</a>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
